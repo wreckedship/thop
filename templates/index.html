@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OCR to Speech</title>
+</head>
+<body>
+    <h1>OCR to Speech System</h1>
+
+    <input type="file" id="fileInput" accept="image/*">
+    <button onclick="upload()">Upload Image</button>
+
+    <p id="status"></p>
+    <script>
+        function upload() {
+            const fileInput = document.getElementById("fileInput");
+            const status = document.getElementById("status");
+
+            if (fileInput.files.length === 0) {
+                status.innerText = "Please select an image first.";
+                return;
+            }
+
+            const file = fileInput.files[0];
+
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                status.innerText = "Image processed and audio played on Pi.";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                status.innerText = "Upload failed.";
+            });
+        }
+    </script>
+    
+    
+</body>
+</html>
